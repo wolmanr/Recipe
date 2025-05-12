@@ -9,6 +9,7 @@ namespace RecipeWinForms
         public FrmRecipeSearch()
         {
             InitializeComponent();
+            SQLUtility.connectionstring = "Server=.\\SQLExpress;Database=RecipeDB;Trusted_Connection=true;TrustServerCertificate=true";
             btnSearch.Click += BtnSearch_Click;
             GRecipe.DoubleClick += GRecipe_DoubleClick;
             FormatGrid();
