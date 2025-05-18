@@ -8,7 +8,6 @@ use RecipeDB
 drop table if exists dbo.Recipe;
 GO
 
-go
 create table dbo.Recipe(
     RecipeID int not null identity primary key,
     CuisineID int not null constraint f_Cuisine_Recipe FOREIGN key REFERENCES Cuisine(CuisineID),
