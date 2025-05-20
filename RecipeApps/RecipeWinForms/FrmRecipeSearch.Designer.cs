@@ -34,6 +34,7 @@
             txtSearch = new TextBox();
             lblRecipeName = new Label();
             GRecipe = new DataGridView();
+            BtnNew = new Button();
             tblMain.SuspendLayout();
             tblSearch.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)GRecipe).BeginInit();
@@ -58,19 +59,21 @@
             // 
             // tblSearch
             // 
-            tblSearch.ColumnCount = 3;
+            tblSearch.ColumnCount = 4;
+            tblSearch.ColumnStyles.Add(new ColumnStyle());
             tblSearch.ColumnStyles.Add(new ColumnStyle());
             tblSearch.ColumnStyles.Add(new ColumnStyle());
             tblSearch.ColumnStyles.Add(new ColumnStyle());
             tblSearch.Controls.Add(btnSearch, 2, 0);
             tblSearch.Controls.Add(txtSearch, 1, 0);
             tblSearch.Controls.Add(lblRecipeName, 0, 0);
+            tblSearch.Controls.Add(BtnNew, 3, 0);
             tblSearch.Location = new Point(4, 4);
             tblSearch.Margin = new Padding(4);
             tblSearch.Name = "tblSearch";
             tblSearch.RowCount = 1;
             tblSearch.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tblSearch.Size = new Size(414, 41);
+            tblSearch.Size = new Size(493, 41);
             tblSearch.TabIndex = 0;
             // 
             // btnSearch
@@ -113,7 +116,17 @@
             GRecipe.Size = new Size(864, 367);
             GRecipe.TabIndex = 1;
             // 
-            // RecipeSearch
+            // BtnNew
+            // 
+            BtnNew.Dock = DockStyle.Fill;
+            BtnNew.Location = new Point(407, 3);
+            BtnNew.Name = "BtnNew";
+            BtnNew.Size = new Size(83, 35);
+            BtnNew.TabIndex = 3;
+            BtnNew.Text = "New";
+            BtnNew.UseVisualStyleBackColor = true;
+            // 
+            // FrmRecipeSearch
             // 
             AutoScaleDimensions = new SizeF(9F, 21F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -121,7 +134,7 @@
             Controls.Add(tblMain);
             Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             Margin = new Padding(4);
-            Name = "RecipeSearch";
+            Name = "FrmRecipeSearch";
             Text = "RecipeApp";
             tblMain.ResumeLayout(false);
             tblSearch.ResumeLayout(false);
@@ -138,5 +151,6 @@
         private Button btnSearch;
         private DataGridView GRecipe;
         private Label lblRecipeName;
+        private Button BtnNew;
     }
 }
