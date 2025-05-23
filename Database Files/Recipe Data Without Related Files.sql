@@ -45,4 +45,5 @@ from
         ('butter muffins', 60, '2022-11-27', '2023-01-14', '2024-01-01', 'american'),
         ('chocolate cake', 100, '2005-07-01', null, null, 'american')
     ) as r (RecipeName, Calories, CreatedDate, PublishedDate, ArchivedDate)
+    
 go

@@ -81,7 +81,9 @@ namespace RecipeWinForms
 
         private void Delete()
         {
-
+            int id = (int)dtRecipe.Rows[0]["RecipeID"];
+            string sql = "Delete Recipe where RecipeId = " + id;
+            SQLUtility.ExecuteSQL(sql);
         }
         private void BtnDelete_Click(object? sender, EventArgs e)
         {
