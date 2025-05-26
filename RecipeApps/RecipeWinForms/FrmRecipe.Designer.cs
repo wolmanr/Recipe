@@ -40,12 +40,12 @@
             txtRecipename = new TextBox();
             txtPictureRecipe = new TextBox();
             txtCalories = new TextBox();
-            txtCreatedDate = new TextBox();
             txtPublishedDate = new TextBox();
             txtArchivedDate = new TextBox();
             txtRecipeStatus = new TextBox();
             lblCuisine = new Label();
             lstCuisineName = new ComboBox();
+            dtpCreatedDate = new DateTimePicker();
             tsMain = new ToolStrip();
             btnSave = new ToolStripButton();
             toolStripSeparator1 = new ToolStripSeparator();
@@ -70,12 +70,12 @@
             tblMain.Controls.Add(txtRecipename, 1, 1);
             tblMain.Controls.Add(txtPictureRecipe, 1, 2);
             tblMain.Controls.Add(txtCalories, 1, 3);
-            tblMain.Controls.Add(txtCreatedDate, 1, 4);
             tblMain.Controls.Add(txtPublishedDate, 1, 5);
             tblMain.Controls.Add(txtArchivedDate, 1, 6);
             tblMain.Controls.Add(txtRecipeStatus, 1, 7);
             tblMain.Controls.Add(lblCuisine, 0, 0);
             tblMain.Controls.Add(lstCuisineName, 1, 0);
+            tblMain.Controls.Add(dtpCreatedDate, 1, 4);
             tblMain.Location = new Point(0, 43);
             tblMain.Name = "tblMain";
             tblMain.RowCount = 8;
@@ -184,14 +184,6 @@
             txtCalories.Size = new Size(318, 29);
             txtCalories.TabIndex = 11;
             // 
-            // txtCreatedDate
-            // 
-            txtCreatedDate.Dock = DockStyle.Fill;
-            txtCreatedDate.Location = new Point(123, 143);
-            txtCreatedDate.Name = "txtCreatedDate";
-            txtCreatedDate.Size = new Size(318, 29);
-            txtCreatedDate.TabIndex = 12;
-            // 
             // txtPublishedDate
             // 
             txtPublishedDate.Dock = DockStyle.Fill;
@@ -233,6 +225,13 @@
             lstCuisineName.Name = "lstCuisineName";
             lstCuisineName.Size = new Size(175, 29);
             lstCuisineName.TabIndex = 17;
+            // 
+            // dtpCreatedDate
+            // 
+            dtpCreatedDate.Location = new Point(123, 143);
+            dtpCreatedDate.Name = "dtpCreatedDate";
+            dtpCreatedDate.Size = new Size(200, 29);
+            dtpCreatedDate.TabIndex = 18;
             // 
             // tsMain
             // 
@@ -304,7 +303,6 @@
         private TextBox txtRecipename;
         private TextBox txtPictureRecipe;
         private TextBox txtCalories;
-        private TextBox txtCreatedDate;
         private TextBox txtPublishedDate;
         private TextBox txtArchivedDate;
         private TextBox txtRecipeStatus;
@@ -315,5 +313,6 @@
         private ToolStripSeparator toolStripSeparator2;
         private Label lblCuisine;
         private ComboBox lstCuisineName;
+        private DateTimePicker dtpCreatedDate;
     }
 }

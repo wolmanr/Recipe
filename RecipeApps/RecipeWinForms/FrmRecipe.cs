@@ -36,7 +36,7 @@ namespace RecipeWinForms
             WindowsFormsUtility.SetControlBinding(txtRecipename, dtRecipe);
             WindowsFormsUtility.SetControlBinding(txtPictureRecipe, dtRecipe);
             WindowsFormsUtility.SetControlBinding(txtCalories, dtRecipe);
-            WindowsFormsUtility.SetControlBinding(txtCreatedDate, dtRecipe);
+            WindowsFormsUtility.SetControlBinding(dtpCreatedDate, dtRecipe);
             WindowsFormsUtility.SetControlBinding(txtPublishedDate, dtRecipe);
             WindowsFormsUtility.SetControlBinding(txtArchivedDate, dtRecipe);
             WindowsFormsUtility.SetControlBinding(txtRecipeStatus, dtRecipe);
@@ -71,7 +71,10 @@ namespace RecipeWinForms
 
         private void Delete()
         {
-
+            int id = (int)dtRecipe.Rows[0]["RecipeId"];
+            string sql = "delete recipe where Recipeid = " + id;
+            SQLUtility.ExecuteSQL(sql);
+            this.Close();
         }
         private void BtnSave_Click(object? sender, EventArgs e)
         {
