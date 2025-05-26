@@ -1,39 +1,86 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
+﻿using System.Data;
 using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using CPUFramework;
+using CPUWindowsFormFramework;
 
 namespace RecipeWinForms
 {
     public partial class FrmRecipe : Form
     {
+        DataTable dtRecipe;
         public FrmRecipe()
         {
             InitializeComponent();
-           
+            btnSave.Click += BtnSave_Click;
+            btnDelete.Click += BtnDelete_Click;
+            foreach(Control c in tblMain.Controls)
+            {
+                c.DataBindings.DefaultDataSourceUpdateMode = DataSourceUpdateMode.OnPropertyChanged;
+            }
+            
         }
+
+
         public void ShowForm(int recipeid)
         {
             
-            string sql = "select r.* from recipe r  where r.recipeid = " + recipeid.ToString();
+            string sql = "select r.*, c.CuisineName from recipe r join Cuisine c on c.Cuisineid = r.CuisineId where r.recipeid = " + recipeid.ToString();
             
-            DataTable dt = SQLUtility.GetDataTable(sql);
-            
-            txtRecipename.DataBindings.Add("Text", dt, "RecipeName");
-            txtPicture.DataBindings.Add("Text", dt, "PictureRecipe");
-            txtCalaroies.DataBindings.Add("Text", dt, "Calories");
-            txtCreatedDate.DataBindings.Add("Text", dt, "CreatedDate");
-            txtPublishedDate.DataBindings.Add("Text", dt, "PublishedDate");
-            txtArchivedDate.DataBindings.Add("Text", dt, "ArchivedDate");
-            txtRecipeStatus.DataBindings.Add("Text", dt, "RecipeStatus");
+            dtRecipe = SQLUtility.GetDataTable(sql);
+            if (recipeid == 0)
+            {
+                dtRecipe.Rows.Add();
+            }
+            DataTable dtCuisine = SQLUtility.GetDataTable("select CuisineId, CuisineName from Cuisine");
+            WindowsFormsUtility.SetListButtons(lstCuisineName, dtCuisine, dtRecipe, "Cuisine");
+            WindowsFormsUtility.SetControlBinding(txtRecipename, dtRecipe);
+            WindowsFormsUtility.SetControlBinding(txtPictureRecipe, dtRecipe);
+            WindowsFormsUtility.SetControlBinding(txtCalories, dtRecipe);
+            WindowsFormsUtility.SetControlBinding(txtCreatedDate, dtRecipe);
+            WindowsFormsUtility.SetControlBinding(txtPublishedDate, dtRecipe);
+            WindowsFormsUtility.SetControlBinding(txtArchivedDate, dtRecipe);
+            WindowsFormsUtility.SetControlBinding(txtRecipeStatus, dtRecipe);
             this.Show();
+        }
+        private void Save()
+        {
+            SQLUtility.DebugPrintDataTable(dtRecipe);
+            DataRow r = dtRecipe.Rows[0];
+            string sql = "";
+            int id = (int)r["RecipeId"];
+
+            if (id > 0)
+            {
+                sql = string.Join(Environment.NewLine, $"update recipe set",
+                    $" CuisineId = '{r["CuisineId"]}',",
+                    $" RecipeName = '{r["RecipeName"]}',",
+                    $" Calories = '{r["Calories"]}',",
+                    $" CreatedDate = '{r["CreatedDate"]}'",
+                    $" where RecipeId = {r["Recipeid"]}"); 
+            }
+            else
+            {
+                sql = $"INSERT INTO Recipe (CuisineId, RecipeName, Calories, CreatedDate) " +
+                $"SELECT '{r["CuisineId"]}', '{r["RecipeName"]}', '{r["Calories"]}', '{r["CreatedDate"]}'";
+            }
+
+            Debug.Print("--------------");
+            Debug.Print(sql);
+            SQLUtility.ExecuteSQL(sql);
+        }
+
+        private void Delete()
+        {
+
+        }
+        private void BtnSave_Click(object? sender, EventArgs e)
+        {
+            Save();
+        }
+
+        private void BtnDelete_Click(object? sender, EventArgs e)
+        {
+            Delete();
         }
     }
 }
