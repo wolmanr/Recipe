@@ -28,7 +28,7 @@ create table dbo.Users(
 )
 go
 create table dbo.Cuisine(
-    CuisineId int not null identity primary key,
+    CuisineId int identity primary key,
     CuisineName varchar(50) not null
         constraint c_Cuisine_name_cannot_be_blank check(CuisineName <> '')
         constraint u_Cuisine_name unique
