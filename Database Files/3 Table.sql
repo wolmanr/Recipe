@@ -152,3 +152,5 @@ create table dbo.CookbookRecipe(
         constraint c_Cookbookrecipe_sequence_must_be_greater_than_zero check(CookbookRecipeSequence > 0),
         constraint u_Cookbook_recipe unique (cookbookId, recipeId)
 )
+
+ALTER TABLE Recipe ALTER COLUMN UserId INT NULL;
