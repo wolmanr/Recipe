@@ -7,4 +7,3 @@ from
 join dbo.Cuisine c on c.CuisineName = r.CuisineName
 join dbo.Users u on u.UserName = r.UserName;
 
-select * from Recipe
