@@ -16,11 +16,8 @@ namespace RecipeWinForms
             foreach(Control c in tblMain.Controls)
             {
                 c.DataBindings.DefaultDataSourceUpdateMode = DataSourceUpdateMode.OnPropertyChanged;
-            }
-            
+            } 
         }
-
-
         public void ShowForm(int recipeid)
         {
             
