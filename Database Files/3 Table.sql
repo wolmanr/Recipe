@@ -37,7 +37,7 @@ go
 create table dbo.Recipe(
     RecipeID int not null identity primary key,
     CuisineID int not null constraint f_Cuisine_Recipe FOREIGN key REFERENCES Cuisine(CuisineID),
-    UserId int not null constraint f_User_Recipe FOREIGN KEY REFERENCES Users(UserId),
+    UserId int constraint f_User_Recipe FOREIGN KEY REFERENCES Users(UserId),
     RecipeName varchar(100) not null
         constraint c_Recipe_name_cannot_be_blank check(RecipeName <> '')
         constraint U_Recipe_name unique,
