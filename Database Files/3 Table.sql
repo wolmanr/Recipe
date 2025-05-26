@@ -17,7 +17,7 @@ drop table if exists dbo.Users;
 GO
 
 create table dbo.Users(
-    UserId int not null identity PRIMARY key,
+    UserId int identity PRIMARY key,
     FirstName varchar(100) not null
         constraint c_Users_first_name_cannot_be_blank check(FirstName <> ''),
      LastName varchar(100) not null
