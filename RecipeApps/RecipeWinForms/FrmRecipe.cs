@@ -18,6 +18,7 @@ namespace RecipeWinForms
                 c.DataBindings.DefaultDataSourceUpdateMode = DataSourceUpdateMode.OnPropertyChanged;
             } 
         }
+
         public void ShowForm(int recipeid)
         {
             

@@ -14,7 +14,6 @@ namespace RecipeWinForms
             btnNew.Click += BtnNew_Click;
             FormatGrid();
         }
-
         private void SearchForRecipe(string recipename)
         {
             string sql = "select r.recipeID, r.recipename, r.calories from recipe r where r.recipename like '%" + recipename + "%'";
@@ -30,7 +29,6 @@ namespace RecipeWinForms
             GRecipe.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
             GRecipe.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
         }
-
         private void ShowRecipeForm(int rowindex)
         {
             int id = 0;
