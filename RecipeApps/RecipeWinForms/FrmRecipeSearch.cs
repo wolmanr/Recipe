@@ -1,8 +1,8 @@
 ﻿using System.Data;
 using System.Diagnostics;
-using CPUFramework;
+
 using Microsoft.Data.SqlClient;
-using RecipeSystem;
+
 namespace RecipeWinForms
 {
     public partial class FrmRecipeSearch : Form
