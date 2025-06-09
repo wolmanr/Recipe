@@ -8,3 +8,6 @@ join dbo.Cuisine c on c.CuisineName = r.CuisineName
 join dbo.Users u on u.UserName = r.UserName;
 
 select * from recipe
+
+INSERT INTO Recipe (CuisineId, RecipeName, Calories, CreatedDate)
+VALUES (NULL, 'Test Recipe Without Cuisine', 300, '2025-06-09');
