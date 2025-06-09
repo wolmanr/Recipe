@@ -154,3 +154,4 @@ create table dbo.CookbookRecipe(
 )
 
 ALTER TABLE Recipe ALTER COLUMN UserId INT NULL;
+ALTER TABLE Recipe ALTER COLUMN CuisineId INT NULL;
