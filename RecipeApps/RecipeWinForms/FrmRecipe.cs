@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using CPUFramework;
 using CPUWindowsFormFramework;
+using RecipeSystem;
 
 namespace RecipeWinForms
 {
@@ -20,10 +21,9 @@ namespace RecipeWinForms
         }
         public void ShowForm(int recipeid)
         {
+
+            dtRecipe = Recipe.Load(recipeid);
             
-            string sql = "select r.*, c.CuisineName from recipe r join Cuisine c on c.Cuisineid = r.CuisineId where r.recipeid = " + recipeid.ToString();
-            
-            dtRecipe = SQLUtility.GetDataTable(sql);
             if (recipeid == 0)
             {
                 dtRecipe.Rows.Add();
@@ -41,36 +41,12 @@ namespace RecipeWinForms
         }
         private void Save()
         {
-            SQLUtility.DebugPrintDataTable(dtRecipe);
-            DataRow r = dtRecipe.Rows[0];
-            string sql = "";
-            int id = (int)r["RecipeId"];
-
-            if (id > 0)
-            {
-                sql = string.Join(Environment.NewLine, $"update recipe set",
-                    $" CuisineId = '{r["CuisineId"]}',",
-                    $" RecipeName = '{r["RecipeName"]}',",
-                    $" Calories = '{r["Calories"]}',",
-                    $" CreatedDate = '{r["CreatedDate"]}'",
-                    $" where RecipeId = {r["Recipeid"]}"); 
-            }
-            else
-            {
-                sql = $"INSERT INTO Recipe (CuisineId, RecipeName, Calories, CreatedDate) " +
-                $"SELECT '{r["CuisineId"]}', '{r["RecipeName"]}', '{r["Calories"]}', '{r["CreatedDate"]}'";
-            }
-
-            Debug.Print("--------------");
-            Debug.Print(sql);
-            SQLUtility.ExecuteSQL(sql);
+            Recipe.Save(dtRecipe);
         }
 
         private void Delete()
         {
-            int id = (int)dtRecipe.Rows[0]["RecipeId"];
-            string sql = "delete recipe where Recipeid = " + id;
-            SQLUtility.ExecuteSQL(sql);
+            Recipe.Delete(dtRecipe);
             this.Close();
         }
         private void BtnSave_Click(object? sender, EventArgs e)
