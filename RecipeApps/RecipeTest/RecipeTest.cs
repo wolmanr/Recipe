@@ -10,7 +10,7 @@ namespace RecipeTest
 
         public void Setup()
         {
-            DBManager.SetConnectionString("Server=.\\SqlExpress;Database=RecipeDB;Trusted_Connection=True;Encrypt=false");
+            DBManager.SetConnectionString("Server=tcp:recipe-wolmanr.database.windows.net,1433;Initial Catalog=RecipeDB;Persist Security Info=False;User ID=dev_recipeuser;Password=STArts234(&^;MultipleActiveResultSets=False;Encrypt=False;TrustServerCertificate=False;Connection Timeout=30;");
         }
 
 
@@ -44,18 +44,29 @@ namespace RecipeTest
         [Test]
         public void DeleteRecipe()
         {
-            DataTable dt = SQLUtility.GetDataTable("SELECT TOP 1 RecipeId, RecipeName, Calories FROM Recipe WHERE CuisineId IS NULL");
+            string sql = @"
+        select top 1 r.recipeid, r.recipename, r.calories
+        from recipe r
+        left join cookbookrecipe cr on r.recipeid = cr.recipeid
+        left join mealcourserecipe mcr on r.recipeid = mcr.recipeid
+        where cr.recipeid is null
+        and mcr.recipeid is null;";
+
+            DataTable dt = SQLUtility.GetDataTable(sql);
             int recipeId = 0;
-            string recipedezc = "";
+            string recipedesc = "";
             if (dt.Rows.Count > 0)
             {
                 recipeId = (int)dt.Rows[0]["RecipeId"];
-                recipedezc = dt.Rows[0]["Calories"] + " " + dt.Rows[0]["RecipeName"];
+                recipedesc = dt.Rows[0]["Calories"] + " " + dt.Rows[0]["RecipeName"];
             }
-            Assume.That(recipeId > 0, "No recipes with NULL CuisineId in DB, can't run test");
-            TestContext.WriteLine("Found recipe with NULL CuisineId: ID = " + recipeId + ", Description = " + recipedezc);
+
+            Assume.That(recipeId > 0, "No deletable recipes found, can't run test");
+            TestContext.WriteLine("Found deletable recipe: ID = " + recipeId + ", Description = " + recipedesc);
+
             Recipe.Delete(dt);
-            DataTable dtafterdelete = SQLUtility.GetDataTable("SELECT * FROM Recipe WHERE RecipeId = " + recipeId);
+
+            DataTable dtafterdelete = SQLUtility.GetDataTable("select * from Recipe where RecipeId = " + recipeId);
             Assert.IsTrue(dtafterdelete.Rows.Count == 0, "Record with RecipeId " + recipeId + " still exists in DB");
             TestContext.WriteLine("Record with RecipeId " + recipeId + " was successfully deleted.");
         }
@@ -100,17 +111,17 @@ namespace RecipeTest
             maxcalories = maxcalories + 1;
 
             TestContext.WriteLine("insert recipe with calories = " + maxcalories);
-
+            string uniqueRecipeName = $"{recipename} {DateTime.Now:yyyyMMdd_HHmmss}";
             r["cuisineId"] = cuisineId;
             r["Calories"] = maxcalories;
-            r["RecipeName"] = recipename;
+            r["RecipeName"] = uniqueRecipeName;
             r["CreatedDate"] = createddate;
             r["PublishedDate"] = publisheddate;
             Recipe.Save(dt);
 
             int newid = SQLUtility.GetFirstColumnFirstRowValue("select * from recipe where calories = " + maxcalories);
             Assert.IsTrue(newid > 0, "recipe with num of calories = " + maxcalories + "is not found in DB");
-            TestContext.WriteLine("recipe with the num of calories " + maxcalories + " is found in DB with pk value = " + newid);
+            TestContext.WriteLine("recipe" + uniqueRecipeName + "with the num of calories " + maxcalories + " is found in DB with pk value = " + newid);
 
         }
     }
