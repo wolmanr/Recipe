@@ -86,7 +86,7 @@ namespace RecipeTest
         }
 
         [Test]
-        [TestCase("Test Pancakes", 400, "2024-01-01", "2024-01-02")]
+        [TestCase("Test Ice Cofee", 50, "2024-01-01", "2024-01-02")]
 
         public void InsertNewRecipe(string recipename, int calories, DateTime createddate, DateTime publisheddate)
         {
