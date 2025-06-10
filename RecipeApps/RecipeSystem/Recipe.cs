@@ -20,13 +20,18 @@ namespace RecipeSystem
         }
         public static DataTable Load(int RecipeId)
         {
-            string sql = "select r.*, c.CuisineName from Recipe r join Cuisine c on r.CuisineId = c.CuisineId where r.RecipeID = " + RecipeId.ToString();
+            string sql = "select r.*, c.CuisineName, u.username from Recipe r join Cuisine c on r.CuisineId = c.CuisineId join users u on r.userId = u.UserID where r.RecipeID = " + RecipeId.ToString();
             return SQLUtility.GetDataTable(sql);
 
         }
         public static DataTable GetCuisineList()
         {
             return SQLUtility.GetDataTable("select CuisineId, CuisineName from Cuisine");
+        }
+
+        public static DataTable GetUserList()
+        {
+            return SQLUtility.GetDataTable("select UserId, Username from users");
         }
         public static void Save(DataTable dtrecipe)
         {
@@ -38,6 +43,7 @@ namespace RecipeSystem
             if (id > 0)
             {
                 sql = string.Join(Environment.NewLine, $"update recipe set",
+                    $" UserId = '{r["UserId"]}',",
                     $" CuisineId = '{r["CuisineId"]}',",
                     $" RecipeName = '{r["RecipeName"]}',",
                     $" Calories = {r["Calories"]},",

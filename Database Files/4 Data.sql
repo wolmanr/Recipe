@@ -213,6 +213,3 @@ go
 insert  CookbookRecipe (CookbookId, RecipeId, CookbookRecipeSequence)
 select CookbookId, RecipeId, CookbookRecipeSequence
 from CookbookRecipeCTE;
-
-INSERT INTO Recipe (CuisineId, RecipeName, Calories, CreatedDate)
-VALUES (NULL, 'Test Recipe Without Cuisine', 300, '2025-06-09');

@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using System.Diagnostics;
 using CPUFramework;
+using CPUWindowsFormFramework;
 
 
 
@@ -29,7 +30,9 @@ namespace RecipeWinForms
                 dtRecipe.Rows.Add();
             }
             DataTable dtCuisine = SQLUtility.GetDataTable("select CuisineId, CuisineName from Cuisine");
-            WindowsFormsUtility.SetListButtons(lstCuisineName, dtCuisine, dtRecipe, "Cuisine");
+            WindowsFormsUtility.SetListButtons(lstCuisineName, dtCuisine, dtRecipe, "Cuisine", "CuisineName");
+            DataTable dtUser = SQLUtility.GetDataTable("select UserId, UserName from users");
+            WindowsFormsUtility.SetListButtons(lstUser, dtUser, dtRecipe, "User", "UserName");
             WindowsFormsUtility.SetControlBinding(txtRecipename, dtRecipe);
             WindowsFormsUtility.SetControlBinding(txtPictureRecipe, dtRecipe);
             WindowsFormsUtility.SetControlBinding(txtCalories, dtRecipe);
