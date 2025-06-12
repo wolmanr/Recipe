@@ -1,4 +1,4 @@
-create or alter procedure GetRecipe(@RecipeId int = 0, @All bit = 0, @RecipeName varchar(100) = '')
+create or alter procedure RecipeGet(@RecipeId int = 0, @All bit = 0, @RecipeName varchar(100) = '')
 as
 begin
     select @RecipeName = nullif(@RecipeName, '')
@@ -10,19 +10,19 @@ begin
 end 
 go
 
-exec GetRecipe
+exec RecipeGet
 
-exec GetRecipe @recipeId = 4, @all = 0
+exec RecipeGet @recipeId = 4, @all = 0
 
-exec GetRecipe @All = 1
+exec RecipeGet @All = 1
 
-exec GetRecipe @RecipeName = ''
+exec RecipeGet @RecipeName = ''
 
-exec GetRecipe @RecipeName = 'b'
+exec RecipeGet @RecipeName = 'b'
 
 declare @recipeId int
 
 select top 1 @recipeId = r.RecipeID from Recipe r
 
-exec GetRecipe @recipeId = @recipeId
+exec RecipeGet @recipeId = @recipeId
 

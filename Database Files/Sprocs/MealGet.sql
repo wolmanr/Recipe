@@ -1,4 +1,4 @@
-create or alter procedure GetMeal(@All bit = 0, @MealId int = 0, @MealName varchar(100) = '')
+create or alter procedure MealGet(@All bit = 0, @MealId int = 0, @MealName varchar(100) = '')
 as
 BEGIN
     select @MealName = nullif(@MealName,'')
@@ -10,20 +10,20 @@ BEGIN
 END
 go
 
-exec GetMeal
+exec MealGet
 
-exec GetMeal @all = 1
+exec MealGet @all = 1
 
-exec GetMeal @MealId = 4
+exec MealGet @MealId = 4
 
-exec GetMeal @MealName = ''
+exec MealGet @MealName = ''
 
-exec GetMeal @MealName = 'y'
+exec MealGet @MealName = 'y'
 
-exec GetMeal @All = 0, @mealId = 2, @mealName = 'r'
+exec MealGet @All = 0, @mealId = 2, @mealName = 'r'
 
 declare @MealId int
 
 select top 1 @mealId = m.MealId from meal m
 
-exec GetMeal @MealId =@mealId
+exec MealGet @MealId =@mealId

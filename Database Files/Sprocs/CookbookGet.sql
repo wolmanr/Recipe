@@ -1,4 +1,4 @@
-create or alter procedure GetCookbook(@CookbookId int = 0, @all bit = 0, @CookbookName varchar(225) = '')
+create or alter procedure CookbookGet(@CookbookId int = 0, @all bit = 0, @CookbookName varchar(225) = '')
 as
 BEGIN
     select @CookbookName = nullif(@CookbookName,'')
@@ -10,18 +10,18 @@ BEGIN
 END
 go
 
-exec GetCookbook
+exec CookbookGet
 
-exec GetCookbook @all = 0
+exec CookbookGet @all = 0
 
-exec GetCookbook @cookbookId = 3, @all = 1
+exec CookbookGet @cookbookId = 3, @all = 1
 
-exec GetCookbook @cookbookName = ''
+exec CookbookGet @cookbookName = ''
 
-exec GetCookbook @cookbookName = 'r'
+exec CookbookGet @cookbookName = 'r'
 
 declare @cookbookId int
 
 select top 1 @cookbookId = c.CookbookId from Cookbook c
 
-exec GetCookbook @cookbookId = @CookbookId
+exec CookbookGet @cookbookId = @CookbookId

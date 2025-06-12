@@ -1,4 +1,4 @@
-create or alter procedure GetUser(@UserId int = 0, @All bit = 0, @username varchar(100) = '')
+create or alter procedure UserGet(@UserId int = 0, @All bit = 0, @username varchar(100) = '')
 as
 begin
     select @username = nullif(@username, '')
@@ -10,18 +10,18 @@ begin
 end 
 go
 
-exec GetUser
+exec UserGet
 
-exec GetUser @userId = 4, @all = 0
+exec UserGet @userId = 4, @all = 0
 
-exec GetUser @All = 1
+exec UserGet @All = 1
 
-exec GetUser @userName = ''
+exec UserGet @userName = ''
 
-exec GetUser @username = 'a'
+exec UserGet @username = 'a'
 
 declare @userId int
 
 select top 1 @userId = u.UserId from Users u
 
-exec GetUser @userId = @userId
+exec UserGet @userId = @userId

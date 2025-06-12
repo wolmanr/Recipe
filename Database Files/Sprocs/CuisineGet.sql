@@ -1,4 +1,4 @@
-create or alter procedure GetCusine(@CuisineId int = 0, @all bit = 0, @CuisineName varchar(50) = '')
+create or alter procedure CuisineGet(@CuisineId int = 0, @all bit = 0, @CuisineName varchar(50) = '')
 as
 BEGIN
     select @CuisineName = nullif(@CuisineName,'')
@@ -10,18 +10,18 @@ BEGIN
 END
 go
 
-exec GetCusine
+exec CuisineGet
 
-exec GetCusine @all = 0
+exec CuisineGet @all = 0
 
-exec GetCusine @cuisineId = 3, @all = 1
+exec CuisineGet @cuisineId = 3, @all = 1
 
-exec GetCusine @cuisineName = ''
+exec CuisineGet @cuisineName = ''
 
-exec GetCusine @cuisineName = 'r'
+exec CuisineGet @cuisineName = 'r'
 
 declare @cuisineId int
 
 select top 1 @cuisineId = c.CuisineId from Cuisine c
 
-exec GetCusine @cuisineId = @cuisineId
+exec CuisineGet @cuisineId = @cuisineId
