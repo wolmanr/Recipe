@@ -6,15 +6,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CPUFramework;
+using Microsoft.Data.SqlClient;
 namespace RecipeSystem
 {
     public class Recipe
     {
         public static DataTable SearchRecipes(string recipename)
         {
-            string sql = "select r.recipeID, r.recipename, r.calories from recipe r where r.recipename like '%" + recipename + "%'";
+            DataTable dt = new();
+            SqlCommand cmd = SQLUtility.GetSqlCommand("RecipeGet");
 
-            DataTable dt = SQLUtility.GetDataTable(sql);
+
+            cmd.Parameters["@RecipeName"].Value = recipename;
+
+            dt = SQLUtility.GetDataTable(cmd);
 
             return dt;
         }
