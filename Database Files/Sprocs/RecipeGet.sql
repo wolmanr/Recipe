@@ -7,7 +7,7 @@ BEGIN
     -- Normalize empty string to NULL
     SET @RecipeName = NULLIF(@RecipeName, '')
 
-    SELECT r.RecipeID, r.RecipeName, r.PictureRecipe, r.Calories, r.CreatedDate, r.PublishedDate, r.ArchivedDate, r.RecipeStatus
+    SELECT r.RecipeID, r.RecipeName, r.PictureRecipe, r.Calories, r.CreatedDate, r.PublishedDate, r.ArchivedDate, r.RecipeStatus, r.userid
     FROM Recipe r
     WHERE (@All = 1)
        OR (@RecipeId > 0 AND r.RecipeID = @RecipeId)
