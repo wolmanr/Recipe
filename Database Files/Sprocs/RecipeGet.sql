@@ -7,7 +7,7 @@ BEGIN
     -- Normalize empty string to NULL
     SET @RecipeName = NULLIF(@RecipeName, '')
 
-    SELECT r.RecipeID, r.RecipeName, r.PictureRecipe, r.Calories, r.CreatedDate, r.PublishedDate, r.ArchivedDate, r.RecipeStatus, r.userid
+    SELECT r.RecipeID, r.RecipeName, r.PictureRecipe, r.Calories, r.CreatedDate, r.PublishedDate, r.ArchivedDate, r.RecipeStatus, r.userid, r.cuisineId
     FROM Recipe r
     WHERE (@All = 1)
        OR (@RecipeId > 0 AND r.RecipeID = @RecipeId)
@@ -30,4 +30,5 @@ declare @recipeId int
 select top 1 @recipeId = r.RecipeID from Recipe r
 
 exec RecipeGet @recipeId = @recipeId
+
 
