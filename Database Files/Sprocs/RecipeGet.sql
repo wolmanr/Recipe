@@ -1,13 +1,18 @@
-create or alter procedure RecipeGet(@RecipeId int = 0, @All bit = 0, @RecipeName varchar(100) = '')
-as
-begin
-    select @RecipeName = nullif(@RecipeName, '')
-    select r.RecipeID, r.RecipeName, r.PictureRecipe, r.Calories, r.CreatedDate, r.PublishedDate, r.ArchivedDate, r.RecipeStatus
-    from Recipe r
-    where @RecipeId = r.RecipeID
-    or @All = 1
-    or r.RecipeName like '%' + @RecipeName + '%'
-end 
+CREATE OR ALTER PROCEDURE RecipeGet
+    @RecipeId INT = 0,
+    @All BIT = 0,
+    @RecipeName VARCHAR(100) = NULL
+AS
+BEGIN
+    -- Normalize empty string to NULL
+    SET @RecipeName = NULLIF(@RecipeName, '')
+
+    SELECT r.RecipeID, r.RecipeName, r.PictureRecipe, r.Calories, r.CreatedDate, r.PublishedDate, r.ArchivedDate, r.RecipeStatus
+    FROM Recipe r
+    WHERE (@All = 1)
+       OR (@RecipeId > 0 AND r.RecipeID = @RecipeId)
+       OR (@RecipeName IS NOT NULL AND r.RecipeName LIKE '%' + @RecipeName + '%')
+END
 go
 
 exec RecipeGet
