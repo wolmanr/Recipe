@@ -14,7 +14,7 @@ BEGIN
        OR (@RecipeName IS NOT NULL AND r.RecipeName LIKE '%' + @RecipeName + '%')
 END
 go
-
+/*
 exec RecipeGet
 
 exec RecipeGet @recipeId = 4, @all = 0
@@ -30,5 +30,6 @@ declare @recipeId int
 select top 1 @recipeId = r.RecipeID from Recipe r
 
 exec RecipeGet @recipeId = @recipeId
+*/
 
 
