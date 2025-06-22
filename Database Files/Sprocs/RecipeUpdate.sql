@@ -1,3 +1,5 @@
+Use RecipeDB
+go
 create or alter procedure RecipeUpdate
     @recipeid int = 0,
     @userid int = 0,

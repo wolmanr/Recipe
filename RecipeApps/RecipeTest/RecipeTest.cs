@@ -1,4 +1,5 @@
 using System.Data;
+using NUnit.Framework;
 
 
 
@@ -20,19 +21,26 @@ namespace RecipeTest
         }
 
         [Test]
-        public void SearchRecipes()
+      
+
+        public void SearchRecipe()
         {
             string criteria = "o";
-            int num = SQLUtility.GetFirstColumnFirstRowValue("select Total = count(*) from recipe where recipename like '%" + criteria + "%'");
-            Assume.That(num > 0, "can't run test, there are no recipes that match the search for " + num);
-            TestContext.WriteLine(num + " recipes that match " + criteria);
-            TestContext.WriteLine("ensure that recipes search returns " + num + " rows");
+            int num = SQLUtility.GetFirstColumnFirstRowValue("select total = count(*) from recipe where recipename like '%" + criteria + "%'");
+            Assume.That(num > 0, "can't run test, there are no recipes that match the search for " + criteria);
+            TestContext.WriteLine("there are " + num + "recipes that match " + criteria);
+            TestContext.Write("ensure that recipe search returns " + num + "rows");
+
 
             DataTable dt = Recipe.SearchRecipes(criteria);
             int results = dt.Rows.Count;
 
             Assert.IsTrue(results == num, "results of sproc does not match num of recipes, " + results + " is not equal to " + num);
             TestContext.WriteLine("Number of rows returned by recipe search is " + results);
+
+            Assert.IsTrue(results == num, "results of sproc does not match recipes, " + results + "is not equal to " + num);
+            TestContext.WriteLine("num of rows returned by recipe search is " + results);
+
         }
 
         [Test]

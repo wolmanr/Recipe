@@ -51,30 +51,33 @@ namespace RecipeSystem
         }
         public static void Save(DataTable dtrecipe)
         {
-            SQLUtility.DebugPrintDataTable(dtrecipe);
+            if (dtrecipe.Rows.Count == 0) return;
+
             DataRow r = dtrecipe.Rows[0];
-            string sql = "";
             int id = (int)r["RecipeId"];
 
             if (id > 0)
             {
-                sql = string.Join(Environment.NewLine, $"update recipe set",
-                    $" UserId = '{r["UserId"]}',",
-                    $" CuisineId = '{r["CuisineId"]}',",
-                    $" RecipeName = '{r["RecipeName"]}',",
-                    $" Calories = {r["Calories"]},",
-                    $" CreatedDate = '{r["CreatedDate"]}'",
-                    $" where RecipeId = {r["RecipeId"]}");
+                SqlCommand cmd = SQLUtility.GetSqlCommand("RecipeUpdate");
+
+                cmd.Parameters["@recipeid"].Value = r["RecipeId"];
+                cmd.Parameters["@userid"].Value = r["UserId"];
+                cmd.Parameters["@cuisineid"].Value = r["CuisineId"];
+                cmd.Parameters["@recipename"].Value = r["RecipeName"];
+                cmd.Parameters["@calories"].Value = r["Calories"];
+                cmd.Parameters["@createddate"].Value = r["CreatedDate"];
+                cmd.Parameters["@publisheddate"].Value = r["PublishedDate"];
+                cmd.Parameters["@archiveddate"].Value = r["ArchivedDate"];
+
+                SQLUtility.ExecuteSQL(cmd);
             }
             else
             {
-                sql = $"INSERT INTO Recipe (CuisineId, RecipeName, Calories, CreatedDate) " +
-                $"SELECT '{r["CuisineId"]}', '{r["RecipeName"]}', '{r["Calories"]}', '{r["CreatedDate"]}'";
-            }
+                string sql = $"insert into recipe (userid, cuisineid, recipename, calories, createddate) " +
+                             $"select '{r["UserId"]}', '{r["CuisineId"]}', '{r["RecipeName"]}', '{r["Calories"]}', '{r["CreatedDate"]}'";
 
-            Debug.Print("--------------");
-            Debug.Print(sql);
-            SQLUtility.ExecuteSQL(sql);
+                SQLUtility.ExecuteSQL(sql);
+            }
         }
         public static void Delete(DataTable dtrecipe)
         {
