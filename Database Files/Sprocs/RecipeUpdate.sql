@@ -21,5 +21,12 @@ begin
     where recipeid = @recipeid;
 end
 go
-
 exec recipeupdate
+    @recipeid = 1,
+    @userid = 2,
+    @cuisineid = 3,
+    @recipename = 'My updated recipe',
+    @calories = 350,
+    @createddate = '2024-01-01',
+    @publisheddate = NULL,
+    @archiveddate = NULL;
