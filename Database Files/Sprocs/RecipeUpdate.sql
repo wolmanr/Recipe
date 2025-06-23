@@ -32,3 +32,5 @@ exec recipeupdate
     @createddate = '2024-01-01',
     @publisheddate = NULL,
     @archiveddate = NULL;
+
+GRANT EXECUTE ON dbo.recipeupdate TO dev_recipeuser;
