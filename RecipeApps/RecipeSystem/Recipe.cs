@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data;
 using CPUFramework;
 using Microsoft.Data.SqlClient;
 namespace RecipeSystem
@@ -29,8 +23,14 @@ namespace RecipeSystem
             SqlCommand cmd = SQLUtility.GetSqlCommand("RecipeGet");
             cmd.Parameters["@RecipeId"].Value = RecipeId;
             dt = SQLUtility.GetDataTable(cmd);
-            return dt;
 
+            if (dt.Columns.Contains("RecipeId"))
+            {
+                dt.Columns["RecipeId"].ReadOnly = false;
+                dt.Columns["RecipeId"].AllowDBNull = true;  // optional but helpful
+            }
+
+            return dt;
         }
         public static DataTable GetCuisineList()
         {
@@ -51,32 +51,35 @@ namespace RecipeSystem
         }
         public static void Save(DataTable dtrecipe)
         {
-            if (dtrecipe.Rows.Count == 0) return;
-
+            SQLUtility.DebugPrintDataTable(dtrecipe);
             DataRow r = dtrecipe.Rows[0];
-            int id = (int)r["RecipeId"];
+            SqlCommand cmd;
 
-            if (id > 0)
+            if ((int)r["RecipeId"] > 0)
             {
-                SqlCommand cmd = SQLUtility.GetSqlCommand("RecipeUpdate");
-
+                cmd = SQLUtility.GetSqlCommand("recipeupdate");
                 cmd.Parameters["@recipeid"].Value = r["RecipeId"];
-                cmd.Parameters["@userid"].Value = r["UserId"];
-                cmd.Parameters["@cuisineid"].Value = r["CuisineId"];
-                cmd.Parameters["@recipename"].Value = r["RecipeName"];
-                cmd.Parameters["@calories"].Value = r["Calories"];
-                cmd.Parameters["@createddate"].Value = r["CreatedDate"];
-                cmd.Parameters["@publisheddate"].Value = r["PublishedDate"];
-                cmd.Parameters["@archiveddate"].Value = r["ArchivedDate"];
-
-                SQLUtility.ExecuteSQL(cmd);
             }
             else
             {
-                string sql = $"insert into recipe (userid, cuisineid, recipename, calories, createddate) " +
-                             $"select '{r["UserId"]}', '{r["CuisineId"]}', '{r["RecipeName"]}', '{r["Calories"]}', '{r["CreatedDate"]}'";
+                cmd = SQLUtility.GetSqlCommand("recipeinsert");
+                cmd.Parameters["@recipeid"].Direction = ParameterDirection.Output;
+            }
 
-                SQLUtility.ExecuteSQL(sql);
+            cmd.Parameters["@userid"].Value = r["UserId"];
+            cmd.Parameters["@cuisineid"].Value = r["CuisineId"];
+            cmd.Parameters["@recipename"].Value = r["RecipeName"];
+            cmd.Parameters["@calories"].Value = r["Calories"];
+            cmd.Parameters["@createddate"].Value = r["CreatedDate"];
+            cmd.Parameters["@publisheddate"].Value = r["PublishedDate"];
+            cmd.Parameters["@archiveddate"].Value = r["ArchivedDate"];
+
+            SQLUtility.ExecuteSQL(cmd);
+
+            if ((int)r["RecipeId"] == 0)
+            {
+                dtrecipe.Columns["RecipeId"].ReadOnly = false;
+                r["RecipeId"] = cmd.Parameters["@recipeid"].Value;
             }
         }
         public static void Delete(DataTable dtrecipe)

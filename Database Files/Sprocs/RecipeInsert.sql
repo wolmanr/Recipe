@@ -16,4 +16,4 @@ begin
 end
 
 
-GRANT EXECUTE ON dbo.recipeupdate TO dev_recipeuser;
+GRANT EXECUTE ON dbo.recipeinsert TO dev_recipeuser;
