@@ -19,19 +19,19 @@ GO
 create table dbo.Users(
     UserId int identity PRIMARY key,
     FirstName varchar(100) not null
-        constraint c_Users_first_name_cannot_be_blank check(FirstName <> ''),
+        constraint ck_Users_first_name_cannot_be_blank check(FirstName <> ''),
      LastName varchar(100) not null
-        constraint c_Users_last_name_cannot_be_blank check(LastName <> ''),
+        constraint ck_Users_last_name_cannot_be_blank check(LastName <> ''),
     UserName varchar(150) not null 
-        constraint c_Users_username_cannot_be_blank check(UserName <> '')
+        constraint ck_Users_username_cannot_be_blank check(UserName <> '')
         constraint U_Users_username unique
 )
 go
 create table dbo.Cuisine(
     CuisineId int identity primary key,
     CuisineName varchar(50) not null
-        constraint c_Cuisine_name_cannot_be_blank check(CuisineName <> '')
-        constraint u_Cuisine_name unique
+        constraint ck_Cuisine_name_cannot_be_blank check(CuisineName <> '')
+        constraint uk_Cuisine_name unique
 )
 go
 create table dbo.Recipe(
@@ -39,46 +39,46 @@ create table dbo.Recipe(
     CuisineID int not null constraint f_Cuisine_Recipe FOREIGN key REFERENCES Cuisine(CuisineID),
     UserId int  null constraint f_User_Recipe FOREIGN KEY REFERENCES Users(UserId),
     RecipeName varchar(100) not null
-        constraint c_Recipe_name_cannot_be_blank check(RecipeName <> '')
+        constraint ck_Recipe_name_cannot_be_blank check(RecipeName <> '')
         constraint U_Recipe_name unique,
     PictureRecipe as CONCAT('Recipe_', REPLACE(RecipeName, ' ', ''), '.jpg'),
     Calories int not null 
         constraint Recipe_calories_cannot_be_negative check(Calories >= 0),
     CreatedDate datetime not null
-        constraint c_created_date_cannot_be_future_date_and_must_be_before_1_1_1990 check(CreatedDate between '1/1/1990' and  getdate()),
+        constraint ck_created_date_cannot_be_future_date_and_must_be_before_1_1_1990 check(CreatedDate between '1/1/1990' and  getdate()),
     PublishedDate datetime null
-        constraint c_published_date_cannot_be_future_date check(PublishedDate < getdate()),
+        constraint ck_published_date_cannot_be_future_date check(PublishedDate < getdate()),
     ArchivedDate datetime null
-        constraint c_archived_date_cannot_be_future_date check(ArchivedDate < getdate()),
+        constraint ck_archived_date_cannot_be_future_date check(ArchivedDate < getdate()),
     RecipeStatus as case 
                     when ArchivedDate is not null then 'Archived'
                     when PublishedDate is not null then 'Published'
                     else 'Draft' end persisted,
-        constraint c_Created_date_must_be_before_published check (CreatedDate < PublishedDate),
-        constraint c_PublishedDate_and_createddDate_must_be_before_archived_date check (PublishedDate < ArchivedDate and CreatedDate < ArchivedDate)
+        constraint ck_Created_date_must_be_before_published check (CreatedDate < PublishedDate),
+        constraint ck_PublishedDate_and_createddDate_must_be_before_archived_date check (PublishedDate < ArchivedDate and CreatedDate < ArchivedDate)
 )
 go
 create table dbo.RecipeStep(
     RecipeStepId INT not null identity primary key,
     RecipeId INT not null constraint f_Recipe_step FOREIGN KEY REFERENCES Recipe(RecipeId),
     StepOrder int not null
-        constraint c_RecipeStep_StepOrder_must_be_greater_than_zero check (StepOrder > 0),
+        constraint ck_RecipeStep_StepOrder_must_be_greater_than_zero check (StepOrder > 0),
     StepDescription varchar (300) not null 
-        constraint c_RecipeStep_step_description_cannot_be_blank check (StepDescription <> ''),
+        constraint ck_RecipeStep_step_description_cannot_be_blank check (StepDescription <> ''),
         constraint U_RecipeStep_RecipeId_StepOrder unique (RecipeId, StepOrder)
 )
 GO
 create table dbo.Ingredient(
     IngredientId int not null identity primary key,
     IngredientName varchar (100) not null
-        constraint c_Ingredient_name_cannot_be_blank check (ingredientName <> ''),
+        constraint ck_Ingredient_name_cannot_be_blank check (ingredientName <> ''),
     PictureIngredient as CONCAT('Ingredient', REPLACE(IngredientName, ' ', ''), '.jpg'),
 )
 GO
 create table dbo.Measurement(
     MeasurementId int not null identity primary key,
     Measurement varchar (50) null 
-        constraint C_Measurement_cannot_be_blank check (Measurement <> '') 
+        constraint ck_Measurement_cannot_be_blank check (Measurement <> '') 
         constraint u_Measurement unique 
 )
 go
@@ -88,9 +88,9 @@ create table dbo.RecipeIngredient(
     IngredientId int not null constraint f_Ingredient_Recipeingredient FOREIGN KEY REFERENCES Ingredient(IngredientId),
     MeasurementId int not null constraint f_Measurement_recipeIngredient FOREIGN key REFERENCES Measurement(MeasurementId),
     Amount decimal(10,2) not null
-       constraint c_RecipeIngredient_amount_cannot_be_negative check(Amount >=0),
+       constraint ck_RecipeIngredient_amount_cannot_be_negative check(Amount >=0),
     RecipeIngredientSequence int not null 
-        constraint c_RecipeIngredient_order_cannot_be_negative check(RecipeIngredientSequence > 0),
+        constraint ck_RecipeIngredient_order_cannot_be_negative check(RecipeIngredientSequence > 0),
         constraint U_RecipeId_IngredientId unique (RecipeId, IngredientId),
         constraint U_IngredientId_recipeId_RecipeIngredientOrder unique (IngredientId, RecipeId, RecipeIngredientSequence)
 )
@@ -99,20 +99,20 @@ create table dbo.meal(
     MealId int not null identity primary key,
     UserId int not null constraint f_User_meal FOREIGN key REFERENCES Users(UserId),
     MealName varchar(100) not NULL      
-        constraint c_Meal_name_cannot_be_blank check (MealName <> '')
+        constraint ck_Meal_name_cannot_be_blank check (MealName <> '')
         constraint u_Meal_name unique,
     PictureMeal AS CONCAT('Meal_', REPLACE(MealName, ' ', ''), '.jpg'),
     MealStatus bit not null,
     CreatedDate datetime not null 
-        constraint c_created_date__for_a_meal_must_be_after_1_1_1990_and_not_in_the_future check(CreatedDate between '1/1/1990' and getdate())   
+        constraint ck_created_date__for_a_meal_must_be_after_1_1_1990_and_not_in_the_future check(CreatedDate between '1/1/1990' and getdate())   
 )
 GO
 create table dbo.Course(
     CourseId int not null identity primary key,
     CourseName varchar (100) not null 
-        constraint c_Course_name_cannot_be_blank check(CourseName <> ''),
+        constraint ck_Course_name_cannot_be_blank check(CourseName <> ''),
     CourseOrder int not null 
-        constraint c_Course_order_cannot_be_negative check(CourseOrder > 0)
+        constraint ck_Course_order_cannot_be_negative check(CourseOrder > 0)
 )
 GO
 create table dbo.MealCourse(
@@ -134,14 +134,14 @@ create table dbo.Cookbook(
     CookbookId int not null identity primary key,
     UserId int not null constraint f_Cookbook_user foreign key REFERENCES Users(userId),
     CookbookName varchar(255) not null 
-        constraint c_Cookbook_name_cannot_be_blank check(CookbookName <> '') 
+        constraint ck_Cookbook_name_cannot_be_blank check(CookbookName <> '') 
         constraint u_Cookbook_name unique,
     PictureName AS CONCAT('cookbook_', REPLACE(CookbookName, ' ', ''), '_.jpg'),
     Price decimal(10,2) not null 
-        constraint c_cookbook_price_cannot_be_negative check(Price >= 0),
+        constraint ck_cookbook_price_cannot_be_negative check(Price >= 0),
     CookbookStatus bit not null,
     CreatedDate DateTime not null
-         constraint c_created_date_for_cookbook_must_be_after_1_1_1990_and_not_in_the_future check(CreatedDate between '1/1/1990' and getdate())   
+         constraint ck_created_date_for_cookbook_must_be_after_1_1_1990_and_not_in_the_future check(CreatedDate between '1/1/1990' and getdate())   
 )
 go
 create table dbo.CookbookRecipe(
@@ -149,7 +149,7 @@ create table dbo.CookbookRecipe(
     CookbookId int not null constraint f_CookbookRecipe_cookbook foreign key REFERENCES Cookbook(CookbookId),
     RecipeId int not null constraint f_CookbookRecipe_recipe foreign key REFERENCES Recipe(recipeId),
     CookbookRecipeSequence int not null 
-        constraint c_Cookbookrecipe_sequence_must_be_greater_than_zero check(CookbookRecipeSequence > 0),
+        constraint ck_Cookbookrecipe_sequence_must_be_greater_than_zero check(CookbookRecipeSequence > 0),
         constraint u_Cookbook_recipe unique (cookbookId, recipeId)
 )
 

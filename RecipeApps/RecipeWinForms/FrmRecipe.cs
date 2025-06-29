@@ -22,17 +22,21 @@ namespace RecipeWinForms
         }
         public void ShowForm(int recipeid)
         {
-
             dtRecipe = Recipe.Load(recipeid);
-            
+
             if (recipeid == 0)
             {
                 dtRecipe.Rows.Add();
             }
+
             DataTable dtCuisine = SQLUtility.GetDataTable("select CuisineId, CuisineName from Cuisine");
-            WindowsFormsUtility.SetListButtons(lstCuisineName, dtCuisine, dtRecipe, "Cuisine", "CuisineName");
+            if (lstCuisineName != null)
+                WindowsFormsUtility.SetListButtons(lstCuisineName, dtCuisine, dtRecipe, "Cuisine", "CuisineName");
+
             DataTable dtUser = SQLUtility.GetDataTable("select UserId, UserName from users");
-            WindowsFormsUtility.SetListButtons(lstUser, dtUser, dtRecipe, "User", "UserName");
+            if (lstUser != null)
+                WindowsFormsUtility.SetListButtons(lstUser, dtUser, dtRecipe, "User", "UserName");
+
             WindowsFormsUtility.SetControlBinding(txtRecipename, dtRecipe);
             WindowsFormsUtility.SetControlBinding(txtPictureRecipe, dtRecipe);
             WindowsFormsUtility.SetControlBinding(txtCalories, dtRecipe);
@@ -40,11 +44,19 @@ namespace RecipeWinForms
             WindowsFormsUtility.SetControlBinding(txtPublishedDate, dtRecipe);
             WindowsFormsUtility.SetControlBinding(txtArchivedDate, dtRecipe);
             WindowsFormsUtility.SetControlBinding(txtRecipeStatus, dtRecipe);
+
             this.Show();
         }
         private void Save()
         {
-            Recipe.Save(dtRecipe);
+            try
+            {
+                Recipe.Save(dtRecipe);
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void Delete()
