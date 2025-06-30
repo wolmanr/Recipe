@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using System.Diagnostics;
+using System.Linq.Expressions;
 using CPUFramework;
 using CPUWindowsFormFramework;
 
@@ -49,6 +50,7 @@ namespace RecipeWinForms
         }
         private void Save()
         {
+            Application.UseWaitCursor = true;
             try
             {
                 Recipe.Save(dtRecipe);
@@ -57,12 +59,27 @@ namespace RecipeWinForms
             {
                 MessageBox.Show(ex.Message);
             }
+            finally {
+                Application.UseWaitCursor = false;
+            }
         }
 
         private void Delete()
         {
-            Recipe.Delete(dtRecipe);
-            this.Close();
+            Application.UseWaitCursor = true;
+            try
+            {
+                Recipe.Delete(dtRecipe);
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Recipe");
+            }
+            finally {
+                Application.UseWaitCursor = false;
+                
+            }
         }
         private void BtnSave_Click(object? sender, EventArgs e)
         {
