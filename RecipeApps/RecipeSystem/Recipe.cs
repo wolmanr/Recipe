@@ -11,7 +11,7 @@ namespace RecipeSystem
             SqlCommand cmd = SQLUtility.GetSqlCommand("RecipeGet");
 
 
-            cmd.Parameters["@RecipeName"].Value = recipename;
+            SQLUtility.SetParamValue(cmd, "@RecipeName", recipename);
 
             dt = SQLUtility.GetDataTable(cmd);
 
@@ -21,7 +21,8 @@ namespace RecipeSystem
         {
             DataTable dt = new();
             SqlCommand cmd = SQLUtility.GetSqlCommand("RecipeGet");
-            cmd.Parameters["@RecipeId"].Value = RecipeId;
+
+            SQLUtility.SetParamValue(cmd, "@RecipeId", RecipeId);
             dt = SQLUtility.GetDataTable(cmd);
 
             if (dt.Columns.Contains("RecipeId"))
@@ -85,8 +86,9 @@ namespace RecipeSystem
         public static void Delete(DataTable dtrecipe)
         {
             int id = (int)dtrecipe.Rows[0]["RecipeId"];
-            string sql = "delete recipe where recipeId = " + id;
-            SQLUtility.ExecuteSQL(sql);
+            SqlCommand cmd = SQLUtility.GetSqlCommand("@RecipeDelete");
+            SQLUtility.SetParamValue(cmd, "@RecipeId", id);
+            SQLUtility.ExecuteSQL(cmd);
         }
     }
 }
