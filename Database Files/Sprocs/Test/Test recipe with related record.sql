@@ -1,11 +1,30 @@
-declare @recipeid int
+declare @recipeid int;
 
 select top 1 @recipeid = r.RecipeID
-from recipe R
-join RecipeStep rs
-on r.RecipeID = rs.RecipeId
+from recipe r
+left join MealCourseRecipe mcr on r.RecipeID = mcr.RecipeId
+left join CookbookRecipe cr on r.RecipeID = cr.RecipeId;
 
+select 'recipe' as TypeLabel, RecipeID as Id from recipe where RecipeID = @recipeid
+union
+select 'Meal', MealCourseID from MealCourseRecipe where RecipeId = @recipeid
+union
+select 'Cookbook', CookbookRecipeId from CookbookRecipe where RecipeId = @recipeid;
 
-select * from recipe r where r.RecipeID = @recipeid
+begin try
+    begin tran;
+        delete from mealcourserecipe where recipeId = @recipeid;
+        delete from cookbookrecipe where recipeId = @recipeid;
+        delete from Recipe where RecipeID = @recipeid;
+    commit;
+end try
+begin catch
+    rollback;
+    throw;
+end catch;
 
-exec RecipeDelete @recipeid = @recipeid
+select 'recipe' as TypeLabel, RecipeID as Id from recipe where RecipeID = @recipeid
+union
+select 'Meal', MealCourseID from MealCourseRecipe where RecipeId = @recipeid
+union
+select 'Cookbook', CookbookRecipeId from CookbookRecipe where RecipeId = @recipeid;

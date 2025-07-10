@@ -1,5 +1,14 @@
 create or alter procedure RecipeDelete(@recipeid int)
 as 
-begin 
-    delete recipe where recipeId = @recipeid
+begin
+    begin try
+    begin tran
+        delete recipe where recipeId = @recipeid
+        commit
+    end try
+
+    begin catch
+    rollback;
+    throw
+    end catch
 end

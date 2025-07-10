@@ -1,4 +1,5 @@
 using System.Data;
+using Microsoft.Data.SqlClient;
 using NUnit.Framework;
 
 
@@ -150,6 +151,45 @@ namespace RecipeTest
 
             Exception ex = Assert.Throws<Exception>(() => Recipe.Delete(dt));
             TestContext.Write(ex.Message);
+        }
+
+        [Test]
+        public static void TestDeleteRecipeWithoutMealOrCookbook()
+        {
+            string Sql = @"
+        select top 1 r.RecipeID
+        from Recipe r
+        left join MealCourseRecipe mcr on r.RecipeID = mcr.RecipeId
+        left join CookbookRecipe cr on r.RecipeID = cr.RecipeId
+        where cr.CookbookRecipeId is NULL
+          and mcr.RecipeId is null";
+
+            DataTable dt = SQLUtility.GetDataTable(Sql);
+
+            if (dt.Rows.Count == 0)
+            {
+                TestContext.WriteLine("No recipe found without meal or cookbook reference to delete.");
+                return;
+            }
+
+            int recipeIdToDelete = (int)dt.Rows[0]["RecipeID"];
+            TestContext.WriteLine($"Attempting to delete RecipeId = {recipeIdToDelete}");
+
+            SqlCommand cmdDelete = SQLUtility.GetSqlCommand("RecipeDelete");
+            SQLUtility.SetParamValue(cmdDelete, "@RecipeId", recipeIdToDelete);
+            SQLUtility.ExecuteSQL(cmdDelete);
+
+            string verifySql = $"select count(*) from Recipe where RecipeID = {recipeIdToDelete}";
+            int countAfterDelete = SQLUtility.GetFirstColumnFirstRowValue(verifySql);
+
+            if (countAfterDelete == 0)
+            {
+                TestContext.WriteLine("Delete succeeded, recipe no longer exists.");
+            }
+            else
+            {
+                TestContext.WriteLine("Delete failed, recipe still exists.");
+            }
         }
 
         [Test]
