@@ -4,6 +4,8 @@ begin
     begin try
     begin tran
         delete recipe where recipeId = @recipeid
+        delete mealcourserecipe where recipeId = @recipeId
+        delete cookbookRecipe where RecipeId = @RecipeId
         commit
     end try
 

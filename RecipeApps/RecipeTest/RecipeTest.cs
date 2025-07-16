@@ -102,12 +102,12 @@ namespace RecipeTest
         public void DeleteRecipe()
         {
             string sql = @"
-        select top 1 r.recipeid, r.recipename, r.calories
-        from recipe r
-        left join RecipeIngredient ri on r.recipeid = ri.recipeid
-        left join RecipeStep rs on r.recipeid = rs.recipeid
-        where ri.recipeid is null
-        and rs.recipeid is null;";
+    select top 1 r.recipeid, r.recipename, r.Calories
+    from recipe r
+    left join RecipeIngredient ri on r.recipeid = ri.recipeid
+    left join RecipeStep rs on r.recipeid = rs.recipeid
+    where ri.recipeid is null
+    and rs.recipeid is null;";
 
             DataTable dt = SQLUtility.GetDataTable(sql);
             int recipeId = 0;
@@ -115,7 +115,7 @@ namespace RecipeTest
             if (dt.Rows.Count > 0)
             {
                 recipeId = (int)dt.Rows[0]["RecipeId"];
-                recipedesc = dt.Rows[0]["Calories"] + " " + dt.Rows[0]["RecipeName"];
+                recipedesc = dt.Rows[0]["Calories"].ToString() + " " + dt.Rows[0]["RecipeName"].ToString();
             }
 
             Assume.That(recipeId > 0, "No deletable recipes found, can't run test");
