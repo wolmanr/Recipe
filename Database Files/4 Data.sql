@@ -213,3 +213,30 @@ go
 insert  CookbookRecipe (CookbookId, RecipeId, CookbookRecipeSequence)
 select CookbookId, RecipeId, CookbookRecipeSequence
 from CookbookRecipeCTE;
+
+
+insert into Recipe (CuisineId, UserId, RecipeName, Calories, CreatedDate, PublishedDate, ArchivedDate)
+select top 1 
+    CuisineId, 
+    UserId, 
+    'Test Recipe With Steps Only',
+    250,
+    getdate(),
+    null,
+    null
+from
+    Cuisine cross join Users;
+
+insert into RecipeStep (RecipeId, StepOrder, StepDescription)
+select 
+    r.RecipeId,
+    s.StepOrder,
+    s.StepDescription
+from
+    (select top 1 RecipeId from Recipe where RecipeName = 'Test Recipe With Steps Only' order by RecipeId desc) r
+cross join
+    (values 
+        (1, 'Step 1: Mix dry ingredients'),
+        (2, 'Step 2: Add wet ingredients'),
+        (3, 'Step 3: Bake at 350 degrees for 25 minutes')
+    ) s(StepOrder, StepDescription);
