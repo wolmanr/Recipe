@@ -28,7 +28,7 @@ namespace RecipeWinForms
             if (recipeid == 0)
             {
                 dtRecipe.Rows.Add();
-                dtRecipe.Rows[0]["CreatedDate"] = DateTime.Today;
+                dtRecipe.Rows[0]["CreatedDate"] = DateTime.Now;
             }
 
             DataTable dtCuisine = SQLUtility.GetDataTable("select CuisineId, CuisineName from Cuisine");
