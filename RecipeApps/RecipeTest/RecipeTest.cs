@@ -154,6 +154,38 @@ namespace RecipeTest
         }
 
         [Test]
+        public void DeleteRecipe_Fails_WhenRecentOrNotDraft()
+        {
+            string sql = @"
+        select top 1 r.recipeid, r.recipename, r.calories
+        from recipe r
+        where 
+            (r.archiveddate is not null and datediff(day, r.archiveddate, getdate()) < 30)
+            or r.recipestatus <> 'draft'
+            order by r.recipeid
+";
+
+            DataTable dt = SQLUtility.GetDataTable(sql);
+
+            int recipeId = 0;
+            string recipeDesc = "";
+            if (dt.Rows.Count > 0)
+            {
+                recipeId = (int)dt.Rows[0]["RecipeId"];
+                recipeDesc = dt.Rows[0]["Calories"] + " " + dt.Rows[0]["RecipeName"];
+            }
+
+            Assume.That(recipeId > 0, "No recipe found that is archived <30 days or not in draft, cannot run test.");
+
+            TestContext.WriteLine($"Attempting to delete invalid recipe: ID = {recipeId}, Desc = {recipeDesc}");
+
+            Exception ex = Assert.Throws<Exception>(() => Recipe.Delete(dt));
+            TestContext.WriteLine("Delete attempt threw exception: " + ex.Message);
+
+            StringAssert.Contains("cannot delete recipe", ex.Message.ToLower());
+        }
+
+        [Test]
         public static void TestDeleteRecipeWithoutMealOrCookbook()
         {
             string Sql = @"

@@ -240,3 +240,16 @@ cross join
         (2, 'Step 2: Add wet ingredients'),
         (3, 'Step 3: Bake at 350 degrees for 25 minutes')
     ) s(StepOrder, StepDescription);
+
+insert into dbo.Recipe (CuisineID, UserId, RecipeName, Calories, CreatedDate, PublishedDate, ArchivedDate)
+select
+    c.CuisineID,
+    u.UserId,
+    'Chicken Delight',
+    300,
+    dateadd(day, -20, cast(getdate() as date)),   -- Created 20 days ago
+    dateadd(day, -15, cast(getdate() as date)),   -- Published 15 days ago
+    null                                          -- Not archived yet
+from dbo.Cuisine c
+cross join dbo.Users u
+where c.CuisineName = 'american' and u.UserName = 'janesmith';
