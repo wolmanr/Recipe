@@ -7,11 +7,21 @@ BEGIN
     -- Normalize empty string to NULL
     SET @RecipeName = NULLIF(@RecipeName, '')
 
-    SELECT r.RecipeID, r.RecipeName, r.PictureRecipe, r.Calories, r.createdDate, r.PublishedDate, r.archivedDate, r.recipeStatus, r.cuisineID, r.userId
-    FROM Recipe r
-    WHERE (@All = 1)
-       OR (@RecipeId > 0 AND r.RecipeID = @RecipeId)
-       OR (@RecipeName IS NOT NULL AND r.RecipeName LIKE '%' + @RecipeName + '%')
+  SELECT 
+    r.RecipeID, 
+    r.RecipeName, 
+    r.PictureRecipe, 
+    r.Calories, 
+    r.createdDate, 
+    r.PublishedDate, 
+    r.archivedDate, 
+    r.recipeStatus, 
+    r.cuisineID, 
+    r.userId
+FROM Recipe r
+WHERE (@All = 1)
+   OR (@RecipeId > 0 AND r.RecipeID = @RecipeId)
+   OR (@RecipeName IS NOT NULL AND r.RecipeName LIKE '%' + @RecipeName + '%')
 END
 go
 /*

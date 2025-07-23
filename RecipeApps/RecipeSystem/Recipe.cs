@@ -75,6 +75,8 @@ namespace RecipeSystem
             cmd.Parameters["@publisheddate"].Value = r["PublishedDate"];
             cmd.Parameters["@archiveddate"].Value = r["ArchivedDate"];
 
+            Console.WriteLine($"CreatedDate value before save: {r["CreatedDate"]} ({r["CreatedDate"].GetType()})");
+
             SQLUtility.ExecuteSQL(cmd);
 
             if ((int)r["RecipeId"] == 0)

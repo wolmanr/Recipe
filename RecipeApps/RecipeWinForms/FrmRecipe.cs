@@ -14,6 +14,11 @@ namespace RecipeWinForms
         public FrmRecipe()
         {
             InitializeComponent();
+
+            dtpCreatedDate.Format = DateTimePickerFormat.Custom;
+            dtpCreatedDate.CustomFormat = "MM/dd/yyyy HH:mm:ss";
+            dtpCreatedDate.ShowUpDown = true;
+
             btnSave.Click += BtnSave_Click;
             btnDelete.Click += BtnDelete_Click;
             foreach(Control c in tblMain.Controls)
@@ -56,9 +61,10 @@ namespace RecipeWinForms
             {
                 Recipe.Save(dtRecipe);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                string friendlyMsg = SQLUtility.ParseConstraintMsg(ex.Message);
+                MessageBox.Show(friendlyMsg, "Error");
             }
             finally {
                 Application.UseWaitCursor = false;
@@ -80,7 +86,8 @@ namespace RecipeWinForms
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Recipe");
+                string friendlyMsg = SQLUtility.ParseConstraintMsg(ex.Message);
+                MessageBox.Show(friendlyMsg, "Error");
             }
             finally {
                 Application.UseWaitCursor = false;

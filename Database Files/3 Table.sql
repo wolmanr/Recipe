@@ -45,7 +45,7 @@ create table dbo.Recipe(
     Calories int not null 
         constraint Recipe_calories_cannot_be_negative check(Calories >= 0),
     CreatedDate datetime not null
-        constraint ck_created_date_cannot_be_future_date_and_must_be_before_1_1_1990 check(CreatedDate between '1/1/1990' and  getdate()),
+    constraint ck_created_date_cannot_be_future_date_and_must_be_before_1_1_1990 check (CreatedDate between '1/1/1990' and getdate()),
     PublishedDate datetime null
         constraint ck_published_date_cannot_be_future_date check(PublishedDate < getdate()),
     ArchivedDate datetime null
