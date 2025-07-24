@@ -36,6 +36,14 @@ begin
         where RecipeID = @RecipeID;
     end
 
+    -- ✅ Return current values for readonly columns back to your app
+    select
+        @CreatedDate = CreatedDate,
+        @PublishedDate = PublishedDate,
+        @ArchivedDate = ArchivedDate
+    from Recipe
+    where RecipeID = @RecipeID;
+
     return @Return;
 end
 go

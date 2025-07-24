@@ -249,29 +249,34 @@ namespace RecipeTest
             TestContext.WriteLine("Number of rows in cuisine table returned by the app = " + dt.Rows.Count);
         }
         [Test]
-        [TestCase("Test Ice Cofee", 50, "2024-01-01", "2024-01-02")]
-        public void InsertNewRecipe(string recipename, int calories, DateTime createddate, DateTime publisheddate)
+        [TestCase("Test Ice Coffee", 50)]
+        public void InsertNewRecipe(string recipename, int calories)
         {
             DataTable dt = SQLUtility.GetDataTable("select * from recipe where recipeId = 0");
             DataRow r = dt.NewRow();
             dt.Rows.Add(r);
+
             int cuisineId = SQLUtility.GetFirstColumnFirstRowValue("select top 1 cuisineId from cuisine");
             Assume.That(cuisineId > 0, "cant run test, no cuisine name in the DB");
-            int maxcalories = SQLUtility.GetFirstColumnFirstRowValue("select max(calories) from recipe");
-            maxcalories = maxcalories + 1;
+
+            int maxcalories = SQLUtility.GetFirstColumnFirstRowValue("select max(calories) from recipe") + 1;
             TestContext.WriteLine("insert recipe with calories = " + maxcalories);
+
             string uniqueRecipeName = $"{recipename} {DateTime.Now:yyyyMMdd_HHmmss}";
             r["cuisineId"] = cuisineId;
             r["Calories"] = maxcalories;
             r["RecipeName"] = uniqueRecipeName;
-            r["CreatedDate"] = createddate;
-            r["PublishedDate"] = publisheddate;
+
+            // Do NOT set CreatedDate or PublishedDate, let the DB handle it
+
             Recipe.Save(dt);
-            int newid = SQLUtility.GetFirstColumnFirstRowValue("select top 1 recipeId from recipe where calories = " + maxcalories);
+
+            int newid = SQLUtility.GetFirstColumnFirstRowValue($"select top 1 recipeId from recipe where calories = {maxcalories}");
             Assert.IsTrue(newid > 0, "recipe with calories = " + maxcalories + " is not found in DB");
 
             TestContext.WriteLine($"recipe '{uniqueRecipeName}' with calories {maxcalories} found in DB with pk value = {newid}");
         }
+
 
         [Test]
         public void InsertRecipe_WithDuplicateRecipeName_ShouldThrowException()

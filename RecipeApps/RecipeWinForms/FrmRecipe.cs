@@ -30,7 +30,7 @@ namespace RecipeWinForms
         public void ShowForm(int recipeid)
         {
             dtRecipe = Recipe.Load(recipeid);
-            bindsource.DataSource = dtRecipe
+            bindsource.DataSource = dtRecipe;
 
             if (recipeid == 0)
             {
