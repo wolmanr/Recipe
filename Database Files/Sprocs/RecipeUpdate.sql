@@ -1,36 +1,41 @@
-Use RecipeDB
-go
-create or alter procedure RecipeUpdate
-    @recipeid int = 0,
-    @userid int = 0,
-    @cuisineid int = 0,
-    @recipename varchar(100) = '',
-    @calories int = 0,
-    @createddate date = null,
-    @publisheddate date = null,
-    @archiveddate date = null
+create or alter procedure dbo.RecipeUpdate
+(
+    @RecipeID int output,
+    @CuisineID int,
+    @UserId int,
+    @RecipeName varchar(100),
+    @Calories int,
+    @CreatedDate datetime output,
+    @PublishedDate datetime output,
+    @ArchivedDate datetime output,
+    @Message varchar(500) = '' output
+)
 as
 begin
-    update recipe
-    set 
-        userid = @userid,
-        cuisineid = @cuisineid,
-        recipename = @recipename,
-        calories = @calories,
-        createddate = @createddate,
-        publisheddate = @publisheddate,
-        archiveddate = @archiveddate
-    where recipeid = @recipeid;
+    set nocount on;
+
+    declare @Return int = 0;
+
+    select @RecipeID = isnull(@RecipeID, 0);
+
+    if @RecipeID = 0
+    begin
+        insert Recipe (CuisineID, UserId, RecipeName, Calories)
+        values (@CuisineID, @UserId, @RecipeName, @Calories);
+
+        set @RecipeID = scope_identity();
+    end
+    else
+    begin
+        update Recipe
+        set
+            CuisineID = @CuisineID,
+            UserId = @UserId,
+            RecipeName = @RecipeName,
+            Calories = @Calories
+        where RecipeID = @RecipeID;
+    end
+
+    return @Return;
 end
 go
-exec recipeupdate
-    @recipeid = 1,
-    @userid = 2,
-    @cuisineid = 3,
-    @recipename = 'My updated recipe',
-    @calories = 350,
-    @createddate = '2024-01-01',
-    @publisheddate = NULL,
-    @archiveddate = NULL;
-
-GRANT EXECUTE ON dbo.recipeupdate TO dev_recipeuser;

@@ -54,6 +54,7 @@ namespace RecipeSystem
         {
             SQLUtility.DebugPrintDataTable(dtrecipe);
             DataRow r = dtrecipe.Rows[0];
+            SQLUtility.SaveDataRow(r, "RecipeUpdate");
             SqlCommand cmd;
 
             if ((int)r["RecipeId"] > 0)

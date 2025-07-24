@@ -10,6 +10,7 @@ namespace RecipeWinForms
 {
     public partial class FrmRecipe : Form
     {
+        BindingSource bindsource = new();
         DataTable dtRecipe;
         public FrmRecipe()
         {
@@ -29,6 +30,7 @@ namespace RecipeWinForms
         public void ShowForm(int recipeid)
         {
             dtRecipe = Recipe.Load(recipeid);
+            bindsource.DataSource = dtRecipe
 
             if (recipeid == 0)
             {
@@ -44,13 +46,13 @@ namespace RecipeWinForms
             if (lstUser != null)
                 WindowsFormsUtility.SetListButtons(lstUser, dtUser, dtRecipe, "User", "UserName");
 
-            WindowsFormsUtility.SetControlBinding(txtRecipename, dtRecipe);
-            WindowsFormsUtility.SetControlBinding(txtPictureRecipe, dtRecipe);
-            WindowsFormsUtility.SetControlBinding(txtCalories, dtRecipe);
-            WindowsFormsUtility.SetControlBinding(dtpCreatedDate, dtRecipe);
-            WindowsFormsUtility.SetControlBinding(txtPublishedDate, dtRecipe);
-            WindowsFormsUtility.SetControlBinding(txtArchivedDate, dtRecipe);
-            WindowsFormsUtility.SetControlBinding(txtRecipeStatus, dtRecipe);
+            WindowsFormsUtility.SetControlBinding(txtRecipename, bindsource);
+            WindowsFormsUtility.SetControlBinding(txtPictureRecipe, bindsource);
+            WindowsFormsUtility.SetControlBinding(txtCalories, bindsource);
+            WindowsFormsUtility.SetControlBinding(dtpCreatedDate, bindsource);
+            WindowsFormsUtility.SetControlBinding(txtPublishedDate, bindsource);
+            WindowsFormsUtility.SetControlBinding(txtArchivedDate, bindsource);
+            WindowsFormsUtility.SetControlBinding(txtRecipeStatus, bindsource);
 
             this.Show();
         }
