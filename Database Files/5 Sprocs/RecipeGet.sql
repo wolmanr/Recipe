@@ -17,7 +17,10 @@ BEGIN
     r.archivedDate, 
     r.recipeStatus, 
     r.cuisineID, 
-    r.userId
+    r.userId, 
+    RecipeInfo= dbo.RecipeInfo(r.recipeId),
+    CalorieTotal = dbo.CalorieTotal(r.RecipeID)
+    
 FROM Recipe r
 WHERE (@All = 1)
    OR (@RecipeId > 0 AND r.RecipeID = @RecipeId)

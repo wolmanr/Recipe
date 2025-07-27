@@ -251,3 +251,36 @@ values (
     '2023-01-10',
     dateadd(day, -10, getdate())
 );
+
+DELETE FROM RecipeIngredient;
+
+INSERT INTO RecipeIngredient (RecipeId, IngredientId, MeasurementId, Amount, RecipeIngredientSequence)
+SELECT r.RecipeId, i.IngredientId, m.MeasurementId, x.Amount, x.Sequence
+FROM
+(
+    VALUES
+    ('apple yogurt smoothie', 'granny smith apples', 'cup', 1.00, 1),
+    ('apple yogurt smoothie', 'ice cubes', 'cup', 0.50, 2),
+    ('apple yogurt smoothie', 'vanilla yogurt', 'cup', 1.00, 3),
+    ('butter muffins', 'butter', 'cup', 0.50, 1),
+    ('butter muffins', 'flour', 'cup', 1.50, 2),
+    ('butter muffins', 'sugar', 'cup', 0.75, 3),
+    ('butter muffins', 'eggs', 'slice', 2.00, 4),
+    ('chocolate chip cookies', 'butter', 'cup', 1.00, 1),
+    ('chocolate chip cookies', 'sugar', 'cup', 1.00, 2),
+    ('chocolate chip cookies', 'chocolate chips', 'cup', 1.25, 3),
+    ('chocolate chip cookies', 'flour', 'cup', 2.25, 4),
+    ('cheese bread', 'club bread', 'cup', 2.00, 1),
+    ('cheese bread', 'shredded cheese', 'cup', 1.00, 2),
+    ('cheese bread', 'garlic', 'pinch', 1.00, 3),
+    ('chocolate cake', 'flour', 'cup', 2.50, 1),
+    ('chocolate cake', 'eggs', 'slice', 3.00, 2),
+    ('chocolate cake', 'sugar', 'cup', 1.75, 3),
+    ('chocolate cake', 'chocolate chips', 'cup', 1.50, 4),
+    ('chocolate cake', 'vanilla sugar', 'cup', 0.50, 5),
+    ('Test Recipe With Steps Only', 'sour cream cheese', 'cup', 1.00, 1),
+    ('Test Recipe With Steps Only', 'vanilla pudding', 'cup', 1.00, 2)
+) x (RecipeName, IngredientName, Measurement, Amount, Sequence)
+JOIN Recipe r ON r.RecipeName = x.RecipeName
+JOIN Ingredient i ON i.IngredientName = x.IngredientName
+JOIN Measurement m ON m.Measurement = x.Measurement;
