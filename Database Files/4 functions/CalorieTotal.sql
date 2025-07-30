@@ -1,4 +1,4 @@
-create or alter function CalorieTotal(@RecipeId int)
+create or alter function CalorieTotal(@MealId int)
 returns varchar (30)
 as
 begin
@@ -11,7 +11,7 @@ begin
             on mc.MealCourseId = mcr.MealCourseID
         left join Recipe r 
             on r.RecipeId = mcr.RecipeId
-        where r.recipeId = @RecipeId
+        where m.mealId = @MealId
         group by m.MealName
       
     return @value
